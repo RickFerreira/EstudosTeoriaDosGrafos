@@ -3,31 +3,32 @@ from bibgrafo.grafo_exceptions import *
 
 
 class MeuGrafo(GrafoListaAdjacencia):
-
+#
     def vertices_nao_adjacentes(self):
         '''
         Provê uma lista de vértices não adjacentes no grafo. A lista terá o seguinte formato: [X-Z, X-W, ...]
         Onde X, Z e W são vértices no grafo que não tem uma aresta entre eles.
         :return: Uma lista com os pares de vértices não adjacentes
         '''
+
         vertices_nao_adjacentes = []
 
-        for v in self.N:
+        for i in self.N:
             vertices_adjacentes = []
-            for a in self.A:
-                v1 = self.A[a].getV1()
-                v2 = self.A[a].getV2()
-                if v1 == v:
+            for j in self.A:
+                v1 = self.A[j].getV1()
+                v2 = self.A[j].getV2()
+                if v1 == i:
                     vertices_adjacentes.append(v2)
-                elif v2 == v:
+                elif v2 == i:
                     vertices_adjacentes.append(v1)
 
-            for vt in self.N:
-                if vt != v and vt not in vertices_adjacentes:
-                    a_test_1 = f'{v}-{vt}'
-                    a_test_2 = f'{vt}-{v}'
+            for k in self.N:
+                if k != i and k not in vertices_adjacentes:
+                    a_test_1 = f'{k}-{k}'
+                    a_test_2 = f'{k}-{i}'
                     if a_test_1 not in vertices_nao_adjacentes and a_test_2 not in vertices_nao_adjacentes:
-                        vertices_nao_adjacentes.append(f'{v}-{vt}')
+                        vertices_nao_adjacentes.append(f'{i}-{k}')
 
             vertices_adjacentes = []
 

@@ -13,6 +13,4 @@ paraiba.adicionaAresta("a7", "C", "T")
 paraiba.adicionaAresta("a8", "M", "T")
 paraiba.adicionaAresta("a9", "T", "Z")
 
-
-
 print(paraiba)
