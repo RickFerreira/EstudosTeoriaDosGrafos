@@ -6,12 +6,29 @@ class MeuGrafo(GrafoListaAdjacencia):
 #
     def vertices_nao_adjacentes(self):
         '''
-        Provê uma lista de vértices não adjacentes no grafo. A lista terá o seguinte formato: [X-Z, X-W, ...]
+        Provê uma lista de vértices não adjacentes no grafo. O conjunto terá o seguinte formato: [X-Z, X-W, ...]
         Onde X, Z e W são vértices no grafo que não tem uma aresta entre eles.
         :return: Uma lista com os pares de vértices não adjacentes
         '''
-
-        vertices_nao_adjacentes = []
+        #nos primeiros for ele coloca um indice pra comparar 
+        vna = set()
+        
+        for v1 in self.N:
+            for v2 in self.N:
+                #verifica item por item comparado com outros itens e ve se existe ele na lista de arestas, assim irá saber se tem alguma aresta com aqueles indices
+                achei = False
+                for a in self.A:
+                    if (v1 != v2):
+                        if ((v1 == self.A[a].getV1() and v2 == self.A.[a].getV2()) or (v2 == self.A[a].getV1() and v1 == self.A.[a].getV2()):
+                            (v2 == self.A[a].getV1() and V1 == self.A[a].getV2()):
+                            achei = True
+                if not achei and v1 != v2:           
+                    vna.add("{}-{}").format((v1, v2)
+                                            
+        return vna
+        
+        
+        '''vertices_nao_adjacentes = []
 
         for i in self.N:
             vertices_adjacentes = []
@@ -33,7 +50,7 @@ class MeuGrafo(GrafoListaAdjacencia):
             vertices_adjacentes = []
 
         return vertices_nao_adjacentes
-
+        '''
     def ha_laco(self):
         '''
         Verifica se existe algum laço no grafo.
