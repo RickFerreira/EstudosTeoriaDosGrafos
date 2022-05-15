@@ -216,3 +216,71 @@ class TestGrafo(unittest.TestCase):
         self.assertFalse((self.g_l5.eh_completo()))
         self.assertFalse((self.g_d.eh_completo()))
         self.assertFalse((self.g_d2.eh_completo()))
+
+        
+    # testes de Rick
+    def test_dfs(self):
+        #teste no grafo da paraiba padrão sequencia que Henrique passou na atividade
+        self.assertEqual(self.g_p.dfs('J'), self.g_p_dfs_J)
+        self.assertEqual(set(self.g_p.dfs('J').N), set(self.g_p.N[:]))
+        self.assertEqual(set(self.g_p.dfs('J').A.keys()), set(['a1', 'a2', 'a4', 'a6', 'a8', 'a9']))
+        #teste no grafo da paraiba copiado segunda Sequencia que Henrique passou
+        self.assertEqual(self.g_p2.dfs('J'), self.g_p2_dfs_J)
+        self.assertEqual(set(self.g_p2.dfs('J').N), set(self.g_p2.N[:]))
+        self.assertEqual(set(self.g_p2.dfs('J').A.keys()), set(['a1', 'a3', 'a5', 'a7', 'a6', 'a9']))
+        #teste no grafo sem paralelas sequencia de arestas possiveis
+        self.assertEqual(self.g_p_sem_paralelas.dfs('J'), self.g_p_sem_paralelas_dfs_J)
+        self.assertEqual(set(self.g_p_sem_paralelas.dfs('J').N), set(self.g_p_sem_paralelas.N[:]))
+        self.assertEqual(set(self.g_p_sem_paralelas.dfs('J').A.keys()), set(['a1', 'a2', 'a3', 'a4', 'a6', 'a7']))
+        #teste no primeiro grafo completo
+        self.assertEqual(self.g_c.dfs('J'), self.g_c_dfs_J)
+        self.assertEqual(set(self.g_c.dfs('J').N), set(self.g_c.N[:]))
+        self.assertEqual(set(self.g_c.dfs('J').A.keys()), set(['a1', 'a5', 'a6']))
+        #teste no segundo grafo completo
+        self.assertEqual(self.g_c2_dfs_Nina.dfs('Nina'), self.g_c2_dfs_Nina)
+        self.assertEqual(set(self.g_c2_dfs_Nina.dfs('Nina').N), set(self.g_c2_dfs_Nina.N[:]))
+        self.assertEqual(set(self.g_c2_dfs_Nina.dfs('Nina').A.keys()), set(['amiga']))
+
+        #fazer teste pra dar erro quando tiver laço, gerando um exepetion ou resultado vazio
+        #fazer teste pra quando for algum item desconexo gerando exepetion ou resultado vazio
+        #fazer teste para quando só existir um item no grafo gerando exeption ou arvore vazia
+        '''
+        Algo desse tipo:
+        
+        with self.assertRaises(VerticeInvalidoException):
+            self.assertEqual(self.g_p.grau('G'), 5)
+            
+        with self.assertRaises(VerticeInvalidoException):
+            self.g_p.arestas_sobre_vertice('A')
+        '''
+
+    def test_bfs(self):
+        #teste de uma sequencia no grafo padrão da paraiba
+        self.assertEqual(self.g_p.bfs('J'), self.g_p_bfs_J)
+        self.assertEqual(set(self.g_p.bfs('J').N), set(self.g_p.N[:]))
+        self.assertEqual(set(self.g_p.bfs('J').A.keys()), set(['a1', 'a2', 'a4', 'a6', 'a7', 'a9']))
+        #teste de uma sequencia no grafo completo da paraiba
+        self.assertEqual(self.g_c.bfs('J'), self.g_c_bfs_J)
+        self.assertEqual(set(self.g_c.bfs('J').N), set(self.g_c.N[:]))
+        self.assertEqual(set(self.g_c.bfs('J').A.keys()), set(['a1', 'a2', 'a3']))
+        #teste no segundo grafo completo, verificando a unica aresta
+        self.assertEqual(self.g_c2_bfs_Nina.bfs('Nina'), self.g_c2_bfs_Nina)
+        self.assertEqual(set(self.g_c2_bfs_Nina.bfs('Nina').N), set(self.g_c2_bfs_Nina.N[:]))
+        self.assertEqual(set(self.g_c2_bfs_Nina.bfs('Nina').A.keys()), set(['amiga']))
+        #teste de uma sequencia no grafo da paraiba sem paralelas
+        self.assertEqual(self.g_p_sem_paralelas.bfs('J'), self.g_p_sem_paralelas_bfs_J)
+        self.assertEqual(set(self.g_p_sem_paralelas.bfs('J').N), set(self.g_p_sem_paralelas.N[:]))
+        self.assertEqual(set(self.g_p_sem_paralelas.bfs('J').A.keys()), set(['a1', 'a2', 'a3', 'a4', 'a5', 'a7']))
+
+        #fazer teste pra dar erro quando tiver laço, gerando um exepetion ou resultado vazio
+        #fazer teste pra quando for algum item desconexo gerando exepetion ou resultado vazio
+        #fazer teste para quando só existir um item no grafo gerando exeption ou arvore vazia
+        '''
+        Algo desse tipo:
+        
+        with self.assertRaises(VerticeInvalidoException):
+            self.assertEqual(self.g_p.grau('G'), 5)
+            
+        with self.assertRaises(VerticeInvalidoException):
+            self.g_p.arestas_sobre_vertice('A')
+        '''
