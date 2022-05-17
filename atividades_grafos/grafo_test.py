@@ -240,7 +240,6 @@ class TestGrafo(unittest.TestCase):
         self.assertEqual(self.g_c2_dfs_Nina.dfs('Nina'), self.g_c2_dfs_Nina)
         self.assertEqual(set(self.g_c2_dfs_Nina.dfs('Nina').N), set(self.g_c2_dfs_Nina.N[:]))
         self.assertEqual(set(self.g_c2_dfs_Nina.dfs('Nina').A.keys()), set(['amiga']))
-
         #fazer teste pra dar erro quando tiver laço, gerando um exepetion ou resultado vazio
         #fazer teste pra quando for algum item desconexo gerando exepetion ou resultado vazio
         #fazer teste para quando só existir um item no grafo gerando exeption ou arvore vazia

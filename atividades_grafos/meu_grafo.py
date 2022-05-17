@@ -1,7 +1,6 @@
 from bibgrafo.grafo_lista_adjacencia import GrafoListaAdjacencia
 from bibgrafo.grafo_exceptions import *
-
-
+#Richard Ferreira Salviano
 class MeuGrafo(GrafoListaAdjacencia):
 
     def vertices_nao_adjacentes(self):
@@ -155,6 +154,45 @@ class MeuGrafo(GrafoListaAdjacencia):
         Retornar a árvore DFS, representada por meio de um outro grafo que contém apenas as arestas que fazem parte da árvore
         '''
 
+        '''vini
+        
+        def dfs(self, V=''):
+            Provê um novo grafo após realizar o dfs
+            :param V: O vértice raíz
+            :return: Uma lista com o novo grafo pós dfs
+            :raises: VerticeInvalidoException se o vértice não existe no grafo
+            dfs = MeuGrafo(self.N[::])
+    
+            temVertice = False
+            for v in self.N:
+                if v == V:
+                    temVertice = True
+    
+            VerticesAdjacentes = self.verticesAdjacentes()
+            VerticesPercorrido = []
+    
+            self.dfs_Recursivo(V, dfs, VerticesPercorrido, VerticesAdjacentes)
+    
+            if temVertice == False:
+                raise VerticeInvalidoException("O vértice", V, "não existe no grafo")
+            else:
+                return dfs
+        '''
+
+        '''
+        #henrique
+        dfs(G, r):
+            for a in G.arestas(r):
+                se aresta a não existe no grafo
+                e o nó de destino ainda não foi visitado:
+                    v = vértice oposto a r
+                    arvore_dfs.add(v)
+                    arvore_dfs.add(a)
+                    dfs(G, v)
+        '''
+
+        '''
+        #jv
         finalizada = False
 
         vertices_examinados = {}
@@ -257,7 +295,7 @@ class MeuGrafo(GrafoListaAdjacencia):
                 else:
                     continue
 
-        return grafo_final
+        return grafo_final'''
 
     def bfs(self, V=''):
         '''
