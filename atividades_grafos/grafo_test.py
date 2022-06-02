@@ -110,6 +110,26 @@ class TestGrafo(unittest.TestCase):
 
         self.g_d2 = MeuGrafo(['A', 'B', 'C', 'D'])
 
+        #Grafo do roteiro 2 para testes by Rick
+        self.g_t = MeuGrafo(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K'])
+        self.g_t.adicionaAresta('1', 'A', 'B')
+        self.g_t.adicionaAresta('2', 'A', 'G')
+        self.g_t.adicionaAresta('3', 'A', 'J')
+        self.g_t.adicionaAresta('4', 'G', 'K')
+        self.g_t.adicionaAresta('5', 'K', 'J')
+        self.g_t.adicionaAresta('6', 'J', 'G')
+        self.g_t.adicionaAresta('7', 'J', 'I')
+        self.g_t.adicionaAresta('8', 'I', 'G')
+        self.g_t.adicionaAresta('9', 'G', 'H')
+        self.g_t.adicionaAresta('10', 'H', 'F')
+        self.g_t.adicionaAresta('11', 'F', 'B')
+        self.g_t.adicionaAresta('12', 'B', 'G')
+        self.g_t.adicionaAresta('13', 'B', 'C')
+        self.g_t.adicionaAresta('14', 'C', 'D')
+        self.g_t.adicionaAresta('15', 'D', 'E')
+        self.g_t.adicionaAresta('16', 'D', 'B')
+        self.g_t.adicionaAresta('17', 'E', 'B')
+
     def test_adiciona_aresta(self):
         self.assertTrue(self.g_p.adicionaAresta('a10', 'J', 'C'))
         with self.assertRaises(ArestaInvalidaException):
@@ -217,69 +237,64 @@ class TestGrafo(unittest.TestCase):
         self.assertFalse((self.g_d.eh_completo()))
         self.assertFalse((self.g_d2.eh_completo()))
 
-        
-    # testes de Rick
+    # testes de by Rick DFS
     def test_dfs(self):
-        #teste no grafo da paraiba padrão sequencia que Henrique passou na atividade
-        self.assertEqual(self.g_p.dfs('J'), self.g_p_dfs_J)
-        self.assertEqual(set(self.g_p.dfs('J').N), set(self.g_p.N[:]))
+        #teste no grafo da paraiba com todas as cidades
         self.assertEqual(set(self.g_p.dfs('J').A.keys()), set(['a1', 'a2', 'a4', 'a6', 'a8', 'a9']))
-        #teste no grafo da paraiba copiado segunda Sequencia que Henrique passou
-        self.assertEqual(self.g_p2.dfs('J'), self.g_p2_dfs_J)
-        self.assertEqual(set(self.g_p2.dfs('J').N), set(self.g_p2.N[:]))
-        self.assertEqual(set(self.g_p2.dfs('J').A.keys()), set(['a1', 'a3', 'a5', 'a7', 'a6', 'a9']))
-        #teste no grafo sem paralelas sequencia de arestas possiveis
-        self.assertEqual(self.g_p_sem_paralelas.dfs('J'), self.g_p_sem_paralelas_dfs_J)
-        self.assertEqual(set(self.g_p_sem_paralelas.dfs('J').N), set(self.g_p_sem_paralelas.N[:]))
+        self.assertEqual(set(self.g_p.dfs('C').A.keys()), set(['a1', 'a2', 'a4', 'a6', 'a8', 'a9']))
+        self.assertEqual(set(self.g_p.dfs('E').A.keys()), set(['a2', 'a1', 'a4', 'a6', 'a8', 'a9']))
+        self.assertEqual(set(self.g_p.dfs('P').A.keys()), set(['a4', 'a1', 'a2', 'a6', 'a8', 'a9']))
+        self.assertEqual(set(self.g_p.dfs('M').A.keys()), set(['a7', 'a1', 'a2', 'a4', 'a6', 'a9']))
+        self.assertEqual(set(self.g_p.dfs('T').A.keys()), set(['a6', 'a1', 'a2', 'a4', 'a7', 'a9']))
+        self.assertEqual(set(self.g_p.dfs('Z').A.keys()), set(['a9', 'a6', 'a1', 'a2', 'a4', 'a7']))
+        #teste no grafo sem paralelas
         self.assertEqual(set(self.g_p_sem_paralelas.dfs('J').A.keys()), set(['a1', 'a2', 'a3', 'a4', 'a6', 'a7']))
+        self.assertEqual(set(self.g_p_sem_paralelas.dfs('C').A.keys()), set(['a1', 'a2', 'a3', 'a4', 'a6', 'a7']))
+        self.assertEqual(set(self.g_p_sem_paralelas.dfs('E').A.keys()), set(['a2', 'a1', 'a3', 'a4', 'a6', 'a7']))
+        self.assertEqual(set(self.g_p_sem_paralelas.dfs('P').A.keys()), set(['a3', 'a1', 'a2', 'a4', 'a6', 'a7']))
+        self.assertEqual(set(self.g_p_sem_paralelas.dfs('M').A.keys()), set(['a5', 'a1', 'a2', 'a3', 'a4', 'a7']))
+        self.assertEqual(set(self.g_p_sem_paralelas.dfs('T').A.keys()), set(['a4', 'a1', 'a2', 'a3', 'a5', 'a7']))
+        self.assertEqual(set(self.g_p_sem_paralelas.dfs('Z').A.keys()), set(['a7', 'a4', 'a1', 'a2', 'a3', 'a5']))
         #teste no primeiro grafo completo
-        self.assertEqual(self.g_c.dfs('J'), self.g_c_dfs_J)
-        self.assertEqual(set(self.g_c.dfs('J').N), set(self.g_c.N[:]))
-        self.assertEqual(set(self.g_c.dfs('J').A.keys()), set(['a1', 'a5', 'a6']))
-        #teste no segundo grafo completo
-        self.assertEqual(self.g_c2_dfs_Nina.dfs('Nina'), self.g_c2_dfs_Nina)
-        self.assertEqual(set(self.g_c2_dfs_Nina.dfs('Nina').N), set(self.g_c2_dfs_Nina.N[:]))
-        self.assertEqual(set(self.g_c2_dfs_Nina.dfs('Nina').A.keys()), set(['amiga']))
-        #fazer teste pra dar erro quando tiver laço, gerando um exepetion ou resultado vazio
-        #fazer teste pra quando for algum item desconexo gerando exepetion ou resultado vazio
-        #fazer teste para quando só existir um item no grafo gerando exeption ou arvore vazia
-        '''
-        Algo desse tipo:
-        
-        with self.assertRaises(VerticeInvalidoException):
-            self.assertEqual(self.g_p.grau('G'), 5)
-            
-        with self.assertRaises(VerticeInvalidoException):
-            self.g_p.arestas_sobre_vertice('A')
-        '''
+        self.assertEqual(set(self.g_c.dfs('J').A.keys()), set(['a1', 'a4', 'a6']))
+        self.assertEqual(set(self.g_c.dfs('C').A.keys()), set(['a1', 'a2', 'a6']))
+        self.assertEqual(set(self.g_c.dfs('E').A.keys()), set(['a2', 'a1', 'a5']))
+        self.assertEqual(set(self.g_c.dfs('P').A.keys()), set(['a3', 'a1', 'a4']))
+        #Teste no segundo grafo completo
+        self.assertEqual(set(self.g_c2.dfs('Nina').A.keys()), set(['amiga']))
+        self.assertEqual(set(self.g_c2.dfs('Maria').A.keys()), set(['amiga']))
+        #Teste grafo de exemplo do roteiro
+        self.assertEqual(set(self.g_t.dfs('A').A.keys()), set(['1', '11', '10', '9', '4', '5', '7', '13', '14', '15']))
+        self.assertEqual(set(self.g_t.dfs('B').A.keys()), set(['1', '2', '4', '5', '7', '9', '10', '13', '14', '15']))
+        self.assertEqual(set(self.g_t.dfs('C').A.keys()), set(['13', '1', '2', '4', '5', '7', '9', '10', '16', '15']))
 
+    # testes de by Rick BFS
     def test_bfs(self):
-        #teste de uma sequencia no grafo padrão da paraiba
-        self.assertEqual(self.g_p.bfs('J'), self.g_p_bfs_J)
-        self.assertEqual(set(self.g_p.bfs('J').N), set(self.g_p.N[:]))
+        #Teste de largura em todas as cidades grafos da paraiba
         self.assertEqual(set(self.g_p.bfs('J').A.keys()), set(['a1', 'a2', 'a4', 'a6', 'a7', 'a9']))
-        #teste de uma sequencia no grafo completo da paraiba
-        self.assertEqual(self.g_c.bfs('J'), self.g_c_bfs_J)
-        self.assertEqual(set(self.g_c.bfs('J').N), set(self.g_c.N[:]))
-        self.assertEqual(set(self.g_c.bfs('J').A.keys()), set(['a1', 'a2', 'a3']))
-        #teste no segundo grafo completo, verificando a unica aresta
-        self.assertEqual(self.g_c2_bfs_Nina.bfs('Nina'), self.g_c2_bfs_Nina)
-        self.assertEqual(set(self.g_c2_bfs_Nina.bfs('Nina').N), set(self.g_c2_bfs_Nina.N[:]))
-        self.assertEqual(set(self.g_c2_bfs_Nina.bfs('Nina').A.keys()), set(['amiga']))
-        #teste de uma sequencia no grafo da paraiba sem paralelas
-        self.assertEqual(self.g_p_sem_paralelas.bfs('J'), self.g_p_sem_paralelas_bfs_J)
-        self.assertEqual(set(self.g_p_sem_paralelas.bfs('J').N), set(self.g_p_sem_paralelas.N[:]))
+        self.assertEqual(set(self.g_p.bfs('C').A.keys()), set(['a1', 'a2', 'a4', 'a6', 'a7', 'a9']))
+        self.assertEqual(set(self.g_p.bfs('E').A.keys()), set(['a2', 'a1', 'a4', 'a6', 'a7', 'a9']))
+        self.assertEqual(set(self.g_p.bfs('P').A.keys()), set(['a4', 'a1', 'a2', 'a6', 'a7', 'a9']))
+        self.assertEqual(set(self.g_p.bfs('M').A.keys()), set(['a7', 'a8', 'a1', 'a2', 'a4', 'a9']))
+        self.assertEqual(set(self.g_p.bfs('T').A.keys()), set(['a6', 'a8', 'a9', 'a1', 'a2', 'a4']))
+        self.assertEqual(set(self.g_p.bfs('Z').A.keys()), set(['a9', 'a6', 'a8', 'a1', 'a2', 'a4']))
+        #Teste grafo sem paralela
         self.assertEqual(set(self.g_p_sem_paralelas.bfs('J').A.keys()), set(['a1', 'a2', 'a3', 'a4', 'a5', 'a7']))
-
-        #fazer teste pra dar erro quando tiver laço, gerando um exepetion ou resultado vazio
-        #fazer teste pra quando for algum item desconexo gerando exepetion ou resultado vazio
-        #fazer teste para quando só existir um item no grafo gerando exeption ou arvore vazia
-        '''
-        Algo desse tipo:
-        
-        with self.assertRaises(VerticeInvalidoException):
-            self.assertEqual(self.g_p.grau('G'), 5)
-            
-        with self.assertRaises(VerticeInvalidoException):
-            self.g_p.arestas_sobre_vertice('A')
-        '''
+        self.assertEqual(set(self.g_p_sem_paralelas.bfs('C').A.keys()), set(['a1', 'a2', 'a3', 'a4', 'a5', 'a7']))
+        self.assertEqual(set(self.g_p_sem_paralelas.bfs('E').A.keys()), set(['a2', 'a1', 'a3', 'a4', 'a5', 'a7']))
+        self.assertEqual(set(self.g_p_sem_paralelas.bfs('P').A.keys()), set(['a3', 'a1', 'a2', 'a4', 'a5', 'a7']))
+        self.assertEqual(set(self.g_p_sem_paralelas.bfs('M').A.keys()), set(['a5', 'a6', 'a1', 'a2', 'a3', 'a7']))
+        self.assertEqual(set(self.g_p_sem_paralelas.bfs('T').A.keys()), set(['a4', 'a6', 'a7', 'a1', 'a2', 'a3']))
+        self.assertEqual(set(self.g_p_sem_paralelas.bfs('Z').A.keys()), set(['a7', 'a4', 'a6', 'a1', 'a2', 'a3']))
+        #Teste no primeiro grafo completo
+        self.assertEqual(set(self.g_c.bfs('J').A.keys()), set(['a1', 'a2', 'a3']))
+        self.assertEqual(set(self.g_c.bfs('C').A.keys()), set(['a1', 'a4', 'a5']))
+        self.assertEqual(set(self.g_c.bfs('E').A.keys()), set(['a2', 'a4', 'a6']))
+        self.assertEqual(set(self.g_c.bfs('P').A.keys()), set(['a3', 'a5', 'a6']))
+        #Teste no segundo grafo completo
+        self.assertEqual(set(self.g_c2.bfs('Nina').A.keys()), set(['amiga']))
+        self.assertEqual(set(self.g_c2.bfs('Maria').A.keys()), set(['amiga']))
+        #Teste grafo de exemplo do roteiro
+        self.assertEqual(set(self.g_t.bfs('D').A.keys()), set(['14', '15', '16', '1', '11', '12', '3', '8', '4', '10']))
+        self.assertEqual(set(self.g_t.bfs('G').A.keys()), set(['9', '16', '2', '13', '12', '8', '4', '10', '17', '6']))
+        self.assertEqual(set(self.g_t.bfs('H').A.keys()), set(['13', '9', '2', '6', '12', '16', '10', '8', '17', '4']))

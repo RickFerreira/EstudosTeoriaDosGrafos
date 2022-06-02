@@ -1,3 +1,5 @@
+from collections import deque
+
 from bibgrafo.grafo_lista_adjacencia import GrafoListaAdjacencia
 from bibgrafo.grafo_exceptions import *
 #Richard Ferreira Salviano
@@ -141,161 +143,65 @@ class MeuGrafo(GrafoListaAdjacencia):
                 saida = False
         #se tiver passado por todos sem mudar a saida ela vai ser true
         return saida
-
-    def dijkstra_drone(self, vi, vf, carga: int, carga_max: int, pontos_recarga: list()):
-        pass
-     
     
-    #códigos de Rick grafos de profundidade e lateral
+    #códigos de Rick grafos de profundidade e largura
+    def vertices_Adjacentes(self):
+        '''
+        Richard Ferreira Salviano
+        Criando uma função para gerar uma lista de vertices adjacentes
+        '''
+        #criando a lista
+        verticesAdjacentes = {}
+        #percorrendo as arestas
+        for aresta in self.A:
+            #armazenando a aresta atual
+            arestaAtual = self.A[aresta]
+            #Fazendo condições para verificar se o vertice tem adijacencia e adiconar na lista
+            if arestaAtual.getV1() not in verticesAdjacentes:
+                verticesAdjacentes[arestaAtual.getV1()] = [(arestaAtual.getV2(), aresta)]
+            else:
+                verticesAdjacentes[arestaAtual.getV1()].append((arestaAtual.getV2(), aresta))
+
+            if arestaAtual.getV2() not in verticesAdjacentes:
+                verticesAdjacentes[arestaAtual.getV2()] = [(arestaAtual.getV1(), aresta)]
+            else:
+                verticesAdjacentes[arestaAtual.getV2()].append((arestaAtual.getV1(), aresta))
+        #retornando a lista com todos os vertices que tem adjacencia
+        return verticesAdjacentes
+
+    def dfs_recursivo(self, V, grafo_dfs, verticesPassados, verticesAdjacentes):
+        '''
+        Richard Ferreira Salviano
+        Função para percorrer o grafo recursivamente
+        '''
+
+        verticesPassados.add(V)
+
+        for (verticeAdjacente, rotuloAresta) in verticesAdjacentes[V]:
+        #Se o vertice não está na lista de vertices já passados
+        #Eu vou e adiciono o vertice e aresta na lista
+            if verticeAdjacente not in verticesPassados:
+                grafo_dfs.adicionaAresta(rotuloAresta, V, verticeAdjacente)
+                self.dfs_recursivo(verticeAdjacente, grafo_dfs, verticesPassados, verticesAdjacentes)
+
     def dfs(self, V=''):
         '''
         Richard Ferreira Salviano
         Receber como parâmetro qual o vértice será usado como raiz da árvore, para uma busca em profundidade
         Retornar a árvore DFS, representada por meio de um outro grafo que contém apenas as arestas que fazem parte da árvore
         '''
-
-        '''vini
-        
-        def dfs(self, V=''):
-            Provê um novo grafo após realizar o dfs
-            :param V: O vértice raíz
-            :return: Uma lista com o novo grafo pós dfs
-            :raises: VerticeInvalidoException se o vértice não existe no grafo
-            dfs = MeuGrafo(self.N[::])
-    
-            temVertice = False
-            for v in self.N:
-                if v == V:
-                    temVertice = True
-    
-            VerticesAdjacentes = self.verticesAdjacentes()
-            VerticesPercorrido = []
-    
-            self.dfs_Recursivo(V, dfs, VerticesPercorrido, VerticesAdjacentes)
-    
-            if temVertice == False:
-                raise VerticeInvalidoException("O vértice", V, "não existe no grafo")
-            else:
-                return dfs
-        '''
-
-        '''
-        #henrique
-        dfs(G, r):
-            for a in G.arestas(r):
-                se aresta a não existe no grafo
-                e o nó de destino ainda não foi visitado:
-                    v = vértice oposto a r
-                    arvore_dfs.add(v)
-                    arvore_dfs.add(a)
-                    dfs(G, v)
-        '''
-
-        '''
-        #jv
-        finalizada = False
-
-        vertices_examinados = {}
-
-        for vt in self.N:
-            vertices_examinados[vt] = {
-                'examinado': False,
-                'pai': '',
-                'arestas': [],
-                'ehPai': False
-            }
-
-        vertices_examinados[V] = {
-            'examinado': True,
-            'pai': V,
-            'arestas': [],
-            'ehPai': True
-        }
-
-        arestas_examinadas = []
-        arestas_de_retorno = []
-
-        vertice_atual = V
-
-        comeco = True
-
-        grafo_final = MeuGrafo()
-
-        grafo_final.adicionaVertice(vertice_atual)
-
-        while (finalizada != True):
-            if vertices_examinados[vertice_atual]['examinado'] == True and vertice_atual != V:
-                vertice_atual == vertices_examinados[V]['pai']
-                continue
-
-            elif comeco == False and vertice_atual == V:
-                finalizada = True
-
-            else:
-                comeco = False
-                vertices_examinados[vertice_atual]['arestas'] = self.arestas_sobre_vertice(vertice_atual)
-                todas_arestas_examinadas = False
-
-                qtd_arestas_incidentes = len(vertices_examinados[vertice_atual]['arestas'])
-                cont = 0
-                for aresta_incidente in vertices_examinados[vertice_atual]['arestas']:
-                    cont += 1
-                    if aresta_incidente not in arestas_examinadas:
-                        todas_arestas_examinadas = False
-                        v1 = self.A[aresta_incidente].getV1()
-                        v2 = self.A[aresta_incidente].getV2()
-                        if v1 == v2:
-                            continue
-
-                        if v1 == vertice_atual:
-                            if vertices_examinados[v2]['examinado'] == False and vertices_examinados[v1][
-                                'pai'] != v2 and vertices_examinados[v2]['ehPai'] == False:
-                                vertices_examinados[v2]['pai'] = vertice_atual
-                                vertices_examinados[vertice_atual]['ehPai'] = True
-                                vertice_atual = v2
-                                arestas_examinadas.append(aresta_incidente)
-
-                                if v1 not in grafo_final.N: grafo_final.adicionaVertice(v1)
-                                if v2 not in grafo_final.N: grafo_final.adicionaVertice(v2)
-
-                                grafo_final.adicionaAresta(aresta_incidente, v1, v2)
-                                break
-                            else:
-                                arestas_de_retorno.append(aresta_incidente)
-                                if cont == qtd_arestas_incidentes:
-                                    todas_arestas_examinadas = True
-                                continue
-
-                        elif v2 == vertice_atual:
-                            if vertices_examinados[v1]['examinado'] == False and vertices_examinados[v2][
-                                'pai'] != v1 and vertices_examinados[v1]['ehPai'] == False:
-                                vertices_examinados[v1]['pai'] = vertice_atual
-                                vertices_examinados[vertice_atual]['ehPai'] = True
-                                vertice_atual = v1
-                                arestas_examinadas.append(aresta_incidente)
-
-                                if v1 not in grafo_final.N: grafo_final.adicionaVertice(v1)
-                                if v2 not in grafo_final.N: grafo_final.adicionaVertice(v2)
-
-                                grafo_final.adicionaAresta(aresta_incidente, v1, v2)
-                                break
-                            else:
-                                arestas_de_retorno.append(aresta_incidente)
-                                if cont == qtd_arestas_incidentes:
-                                    todas_arestas_examinadas = True
-                                continue
-
-                    todas_arestas_examinadas = True
-
-                if todas_arestas_examinadas:
-                    vertices_examinados[vertice_atual]['examinado'] = True
-                    vertice_atual = vertices_examinados[vertice_atual]['pai']
-                    continue
-
-                else:
-                    continue
-
-        return grafo_final'''
+        #chamando a função para fazer uma lista adjacente
+        verticesAdjacentes = self.vertices_Adjacentes()
+        #recebendo o grafo
+        grafo_dfs = MeuGrafo(self.N[::])
+        #criando lista para ver os vertices que já foram visitados
+        verticesPassados = set()
+        #Se o vertice atual não for adjacente retorna o grafo atual
+        if V not in verticesAdjacentes: return grafo_dfs
+        #chamando a função recursiva
+        self.dfs_recursivo(V, grafo_dfs, verticesPassados, verticesAdjacentes)
+        #depois que rodar tudo retorna o grafo
+        return grafo_dfs
 
     def bfs(self, V=''):
         '''
@@ -303,78 +209,30 @@ class MeuGrafo(GrafoListaAdjacencia):
         Receber como parâmetro qual o vértice será usado como raiz da árvore, para uma busca em profundidade
         Retornar a árvore BFS, representada por meio de um outro grafo que contém apenas as arestas que fazem parte da árvore
         '''
-        finalizada = False
+        #gerando o grafo
+        grafo_bfs = MeuGrafo(self.N[::])
+        #criando lista para armazenar os vertices visitados
+        verticesPassados = set([V])
+        #chamando o deque para facilitar o trabalho com fila
+        fila = deque([V])
+        #gerando lista de vertices adjacentes
+        verticesAdjacentes = self.vertices_Adjacentes()
+        #Se o vertice atual não for adjacente retorna o grafo atual
+        if V not in verticesAdjacentes: return grafo_bfs
+        #percorrendo a fila até zerar
+        while len(fila) != 0:
+            #remove um elemento do lado esquerdo do deque e retorna o valor.
+            verticeAtual = fila.popleft()
 
-        vertices_examinados = {}
+            for (verticeAdjacente, rotuloAresta) in verticesAdjacentes[verticeAtual]:
+                #Se o vertice ainda não foi acessado adciona ele no grafo
+                if verticeAdjacente not in verticesPassados:
+                    grafo_bfs.adicionaAresta(rotuloAresta, verticeAtual, verticeAdjacente)
+                    verticesPassados.add(verticeAdjacente)
+                    fila.append(verticeAdjacente)
+        #depois de passar por todos os vertices retorna o grafo de busca em largura
+        return grafo_bfs
 
-        for vt in self.N:
-            vertices_examinados[vt] = {
-                'examinado': False,
-                'root': False,
-                'pai': False,
-                'temPai': False,
-                'arestaPai': ''
-            }
-
-        vertices_examinados[V] = {
-            'examinado': True,
-            'root': True,
-            'pai': V,
-            'temPai': True,
-            'arestaPai': ''
-        }
-
-        vertice_atual = V
-
-        comeco = True
-
-        grafo_final = MeuGrafo()
-
-        fila_vertices = []
-
-        while (finalizada == False):
-            arestas_incidentes = self.arestas_sobre_vertice(vertice_atual)
-            for a in arestas_incidentes:
-                v1 = self.A[a].getV1()
-                v2 = self.A[a].getV2()
-                if v1 == v2:
-                    continue
-
-                if v1 == vertice_atual:
-                    if not vertices_examinados[v2]['temPai']:
-                        vertices_examinados[v2]['pai'] = v1
-                        vertices_examinados[v2]['temPai'] = True
-                        vertices_examinados[v2]['arestaPai'] = a
-
-                    if vertices_examinados[v2]['examinado'] == False and v2 not in fila_vertices:
-                        fila_vertices.append(v2)
-
-                if v2 == vertice_atual:
-                    if not vertices_examinados[v1]['temPai']:
-                        vertices_examinados[v1]['pai'] = v2
-                        vertices_examinados[v1]['temPai'] = True
-                        vertices_examinados[v1]['arestaPai'] = a
-
-                    if vertices_examinados[v1]['examinado'] == False and v1 not in fila_vertices:
-                        fila_vertices.append(v1)
-
-            vertices_examinados[vertice_atual]['examinado'] = True
-
-            if vertices_examinados[vertice_atual]['examinado']:
-                grafo_final.adicionaVertice(vertice_atual)
-
-            if vertices_examinados[vertice_atual]['root'] == False:
-                v_pai = vertices_examinados[vertice_atual]['pai']
-                aresta_do_pai = vertices_examinados[vertice_atual]['arestaPai']
-
-                grafo_final.adicionaAresta(aresta_do_pai, vertice_atual, v_pai)
-
-            if vertice_atual in fila_vertices:
-                fila_vertices.remove(vertice_atual)
-                if len(fila_vertices) == 0:
-                    finalizada = True
-                    break
-
-            vertice_atual = fila_vertices[0]
-
-        return grafo_final
+    #Essa função só será feita depois
+    def dijkstra_drone(self, vi, vf, carga: int, carga_max: int, pontos_recarga: list()):
+        pass
